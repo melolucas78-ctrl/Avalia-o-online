@@ -1,0 +1,2002 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <title>Avaliação Online - Consultoria Lucas Melo</title>
+  <style>
+    :root {
+      --bg-dark: #0D0D0D;
+      --bg-card: #161616;
+      --bg-input: #1F1F1F;
+      --border-subtle: #2E2E2E;
+      --orange-primary: #FF9F1C;
+      --orange-vibrant: #FF6B00;
+      --orange-glow: rgba(255, 159, 28, 0.25);
+      --white: #FFFFFF;
+      --text-muted: #A3A3A3;
+      --danger: #FF4D4D;
+      --success: #2ECC71;
+      --radius-lg: 14px;
+      --radius-md: 10px;
+      --radius-sm: 6px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-dark);
+      background-image:
+        radial-gradient(circle at 15% 10%, rgba(255, 159, 28, 0.12) 0%, transparent 40%),
+        radial-gradient(circle at 85% 90%, rgba(255, 107, 0, 0.10) 0%, transparent 45%);
+      color: var(--white);
+      line-height: 1.5;
+      min-height: 100vh;
+      padding-bottom: 48px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ================= HEADER & BRANDING ================= */
+    .app-header {
+      background: linear-gradient(180deg, #141414 0%, #0D0D0D 100%);
+      border-bottom: 2px solid var(--orange-primary);
+      box-shadow: 0 6px 25px rgba(255, 159, 28, 0.12);
+      padding: 20px 16px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .app-header::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 240px;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--orange-primary), transparent);
+    }
+
+    .brand-lockup {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .lm-monogram {
+      width: 68px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      filter: drop-shadow(0 0 10px rgba(255, 159, 28, 0.45));
+    }
+
+    .brand-title {
+      font-size: 1.35rem;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      font-style: italic;
+      color: var(--white);
+      line-height: 1.1;
+    }
+
+    .brand-subtitle {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--orange-primary);
+    }
+
+    .header-badge {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 4px 14px;
+      background: rgba(255, 159, 28, 0.12);
+      border: 1px solid rgba(255, 159, 28, 0.4);
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--orange-primary);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    /* ================= CONTAINER & PROGRESS ================= */
+    .container {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 20px 16px 0;
+    }
+
+    .progress-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 16px 20px;
+      margin-bottom: 20px;
+    }
+
+    .progress-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      gap: 10px;
+    }
+
+    .step-counter {
+      font-size: 0.85rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      font-style: italic;
+      color: var(--orange-primary);
+      letter-spacing: 0.5px;
+    }
+
+    .step-percent {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      background: #262626;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 16.66%;
+      background: linear-gradient(90deg, var(--orange-vibrant), var(--orange-primary));
+      box-shadow: 0 0 12px var(--orange-glow);
+      border-radius: 999px;
+      transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .step-dots {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 6px;
+      margin-top: 12px;
+    }
+
+    .step-dot {
+      height: 4px;
+      border-radius: 2px;
+      background: #2A2A2A;
+      transition: background 0.3s ease;
+    }
+
+    .step-dot.active {
+      background: var(--orange-primary);
+    }
+
+    .step-dot.completed {
+      background: rgba(255, 159, 28, 0.55);
+    }
+
+    /* ================= FORM CARD & SECTIONS ================= */
+    .form-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 24px 20px;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5);
+    }
+
+    .step-panel {
+      display: none;
+      animation: fadeSlide 0.3s ease forwards;
+    }
+
+    .step-panel.active {
+      display: block;
+    }
+
+    @keyframes fadeSlide {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .section-header {
+      border-left: 4px solid var(--orange-primary);
+      padding-left: 14px;
+      margin-bottom: 22px;
+    }
+
+    .section-tag {
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--orange-primary);
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .section-title {
+      font-size: 1.35rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      font-style: italic;
+      color: var(--white);
+      line-height: 1.2;
+    }
+
+    .fields-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+
+    @media (min-width: 640px) {
+      .form-card {
+        padding: 32px;
+      }
+      .fields-grid.two-cols {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .col-span-2 {
+        grid-column: span 2;
+      }
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .field-label {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #EAEAEA;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .req-star {
+      color: var(--orange-primary);
+      font-weight: 800;
+      margin-left: 3px;
+    }
+
+    .unit-badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--orange-primary);
+      background: rgba(255, 159, 28, 0.12);
+      padding: 2px 7px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    input[type="number"],
+    input[type="tel"],
+    input[type="email"],
+    select,
+    textarea {
+      width: 100%;
+      background-color: var(--bg-input);
+      border: 1.5px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      color: var(--white);
+      font-family: inherit;
+      font-size: 0.96rem;
+      padding: 12px 14px;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      color-scheme: dark;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--orange-primary);
+      box-shadow: 0 0 0 3px var(--orange-glow);
+    }
+
+    input[readonly] {
+      background-color: #141414;
+      border-color: #262626;
+      color: var(--orange-primary);
+      font-weight: 700;
+      cursor: default;
+    }
+
+    textarea {
+      min-height: 88px;
+      resize: vertical;
+    }
+
+    .field-group.has-error input,
+    .field-group.has-error select,
+    .field-group.has-error textarea {
+      border-color: var(--danger);
+      box-shadow: 0 0 0 3px rgba(255, 77, 77, 0.18);
+    }
+
+    .error-msg {
+      font-size: 0.78rem;
+      color: var(--danger);
+      font-weight: 600;
+      display: none;
+    }
+
+    .field-group.has-error .error-msg {
+      display: block;
+    }
+
+    /* ================= MULTI-SELECT & CHECKBOXES ================= */
+    .checkbox-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    @media (min-width: 600px) {
+      .checkbox-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .check-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 11px;
+      background: var(--bg-input);
+      border: 1.5px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+
+    .check-card:hover {
+      border-color: rgba(255, 159, 28, 0.55);
+    }
+
+    .check-card input[type="checkbox"] {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      min-width: 20px;
+      border: 2px solid #555;
+      border-radius: 5px;
+      background: #121212;
+      margin-top: 1px;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.2s ease;
+    }
+
+    .check-card input[type="checkbox"]:checked {
+      background: var(--orange-primary);
+      border-color: var(--orange-primary);
+    }
+
+    .check-card input[type="checkbox"]:checked::after {
+      content: "";
+      position: absolute;
+      left: 5px;
+      top: 1px;
+      width: 5px;
+      height: 10px;
+      border: solid #0D0D0D;
+      border-width: 0 2.5px 2.5px 0;
+      transform: rotate(45deg);
+    }
+
+    .check-card.checked {
+      border-color: var(--orange-primary);
+      background: rgba(255, 159, 28, 0.08);
+    }
+
+    .check-card-text {
+      font-size: 0.9rem;
+      color: #F0F0F0;
+      line-height: 1.35;
+    }
+
+    .consent-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .consent-item.has-error .check-card {
+      border-color: var(--danger);
+    }
+
+    /* ================= PRIVACY BOX ================= */
+    .privacy-box {
+      background: #121212;
+      border: 1px solid rgba(255, 159, 28, 0.35);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-top: 22px;
+      font-size: 0.85rem;
+      color: #CCCCCC;
+    }
+
+    .privacy-box h4 {
+      color: var(--orange-primary);
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .privacy-box p {
+      margin-bottom: 8px;
+      line-height: 1.45;
+    }
+
+    .privacy-box p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* ================= REVIEW SUMMARY (STEP 6) ================= */
+    .review-wrapper {
+      background: #111111;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-bottom: 20px;
+      max-height: 380px;
+      overflow-y: auto;
+    }
+
+    .review-header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .review-header-bar h3 {
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      color: var(--orange-primary);
+      letter-spacing: 0.5px;
+    }
+
+    .review-section-block {
+      margin-bottom: 16px;
+    }
+
+    .review-section-block:last-child {
+      margin-bottom: 0;
+    }
+
+    .review-sec-title {
+      font-size: 0.82rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--white);
+      background: #1E1E1E;
+      padding: 6px 10px;
+      border-left: 3px solid var(--orange-primary);
+      border-radius: 4px;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .btn-edit-step {
+      background: transparent;
+      border: 1px solid var(--orange-primary);
+      color: var(--orange-primary);
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      text-transform: uppercase;
+    }
+
+    .btn-edit-step:hover {
+      background: var(--orange-primary);
+      color: #0D0D0D;
+    }
+
+    .review-row {
+      display: flex;
+      flex-direction: column;
+      padding: 6px 8px;
+      border-bottom: 1px dashed #262626;
+      font-size: 0.85rem;
+    }
+
+    .review-row:last-child {
+      border-bottom: none;
+    }
+
+    .review-q {
+      color: var(--text-muted);
+      font-size: 0.78rem;
+    }
+
+    .review-a {
+      color: var(--white);
+      font-weight: 600;
+      word-break: break-word;
+    }
+
+    /* ================= NAVIGATION BUTTONS ================= */
+    .form-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-top: 28px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .btn {
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      padding: 14px 22px;
+      border-radius: var(--radius-md);
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-secondary {
+      background: #242424;
+      color: var(--white);
+      border: 1px solid #383838;
+    }
+
+    .btn-secondary:hover {
+      background: #2F2F2F;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--orange-primary) 0%, var(--orange-vibrant) 100%);
+      color: #0D0D0D;
+      box-shadow: 0 4px 18px rgba(255, 159, 28, 0.35);
+      margin-left: auto;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 22px rgba(255, 159, 28, 0.5);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .alert-banner {
+      background: rgba(255, 77, 77, 0.14);
+      border: 1px solid var(--danger);
+      color: #FF8080;
+      padding: 12px 14px;
+      border-radius: var(--radius-md);
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 18px;
+      display: none;
+    }
+
+    .alert-banner.visible {
+      display: block;
+    }
+
+    .app-footer {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      padding: 0 16px;
+    }
+
+    /* ================= PRINT / PDF REPORT LAYOUT ================= */
+    #pdf-report {
+      display: none;
+    }
+
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 14mm 14mm 18mm 14mm;
+      }
+
+      body {
+        background: #FFFFFF !important;
+        color: #0D0D0D !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        font-size: 10pt;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .app-header,
+      .container,
+      .app-footer {
+        display: none !important;
+      }
+
+      #pdf-report {
+        display: block !important;
+        width: 100%;
+        color: #0D0D0D;
+      }
+
+      .pdf-header {
+        background-color: #0D0D0D !important;
+        color: #FFFFFF !important;
+        padding: 14px 18px;
+        border-bottom: 4px solid #FF9F1C;
+        border-radius: 6px 6px 0 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+      }
+
+      .pdf-brand-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .pdf-title-group h1 {
+        font-size: 15pt;
+        font-weight: 900;
+        font-style: italic;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: #FFFFFF !important;
+        margin: 0;
+      }
+
+      .pdf-title-group span {
+        font-size: 8.5pt;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #FF9F1C !important;
+      }
+
+      .pdf-doc-meta {
+        text-align: right;
+        font-size: 8.5pt;
+        color: #E0E0E0 !important;
+      }
+
+      .pdf-doc-meta strong {
+        display: block;
+        color: #FF9F1C !important;
+        font-size: 9.5pt;
+        text-transform: uppercase;
+      }
+
+      .pdf-section {
+        margin-bottom: 14px;
+        border: 1px solid #DCDCDC;
+        border-radius: 6px;
+        overflow: hidden;
+      }
+
+      .pdf-section-title {
+        background-color: #0D0D0D !important;
+        color: #FFFFFF !important;
+        border-left: 5px solid #FF9F1C;
+        padding: 6px 12px;
+        font-size: 10pt;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        page-break-after: avoid;
+        break-after: avoid;
+      }
+
+      .pdf-items-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0;
+      }
+
+      .pdf-item {
+        padding: 7px 12px;
+        border-bottom: 1px solid #EAEAEA;
+        border-right: 1px solid #EAEAEA;
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+
+      .pdf-item.full-width {
+        grid-column: span 2;
+        border-right: none;
+      }
+
+      .pdf-item:nth-child(even):not(.full-width) {
+        border-right: none;
+      }
+
+      .pdf-question {
+        font-size: 7.8pt;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: #555555;
+        margin-bottom: 2px;
+      }
+
+      .pdf-answer {
+        font-size: 9.5pt;
+        font-weight: 600;
+        color: #0D0D0D;
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+
+      /* Área exclusiva do profissional */
+      .pdf-pro-area {
+        margin-top: 16px;
+        border: 1.5px solid #0D0D0D;
+        border-radius: 6px;
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+
+      .pdf-pro-header {
+        background-color: #FF9F1C !important;
+        color: #0D0D0D !important;
+        font-weight: 900;
+        font-size: 10pt;
+        text-transform: uppercase;
+        padding: 6px 12px;
+        letter-spacing: 0.5px;
+      }
+
+      .pdf-pro-block {
+        padding: 10px 12px;
+        border-bottom: 1px solid #CCCCCC;
+      }
+
+      .pdf-pro-block:last-child {
+        border-bottom: none;
+      }
+
+      .pdf-pro-label {
+        font-size: 8.5pt;
+        font-weight: 800;
+        text-transform: uppercase;
+        color: #0D0D0D;
+        margin-bottom: 6px;
+      }
+
+      .pdf-ruled-lines {
+        height: 92px;
+        background-image: repeating-linear-gradient(
+          to bottom,
+          transparent 0px,
+          transparent 21px,
+          #CCCCCC 22px
+        );
+      }
+
+      .pdf-footer {
+        margin-top: 18px;
+        padding-top: 8px;
+        border-top: 1.5px solid #0D0D0D;
+        text-align: center;
+        font-size: 8pt;
+        font-weight: 700;
+        color: #444444;
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- CABEÇALHO DA APLICAÇÃO -->
+  <header class="app-header">
+    <div class="brand-lockup">
+      <div class="lm-monogram" aria-hidden="true">
+        <svg viewBox="0 0 120 70" width="68" height="40" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="lmGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#FFB74D" />
+              <stop offset="50%" stop-color="#FF9F1C" />
+              <stop offset="100%" stop-color="#FF6B00" />
+            </linearGradient>
+          </defs>
+          <!-- Monograma estilizado LM dinâmico -->
+          <path d="M22 12 L10 56 L42 56 L45 45 L25 45 L34 12 Z" fill="url(#lmGrad)" />
+          <path d="M52 12 L40 56 L51 56 L58 29 L66 48 L75 48 L89 29 L82 56 L94 56 L106 12 L94 12 L73 38 L64 12 Z" fill="url(#lmGrad)" />
+        </svg>
+      </div>
+      <div class="brand-title">LUCAS MELO</div>
+      <div class="brand-subtitle">PERSONAL TRAINER</div>
+    </div>
+    <div>
+      <span class="header-badge">Avaliação Física Online</span>
+    </div>
+  </header>
+
+  <!-- CONTEÚDO PRINCIPAL DO FORMULÁRIO -->
+  <main class="container">
+    <!-- Indicador de Progresso -->
+    <div class="progress-card" role="region" aria-label="Progresso do formulário">
+      <div class="progress-top">
+        <span class="step-counter" id="stepCounterText">Etapa 1 de 6</span>
+        <span class="step-percent" id="stepPercentText">17% concluído</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <div class="step-dots" id="stepDots">
+        <div class="step-dot active"></div>
+        <div class="step-dot"></div>
+        <div class="step-dot"></div>
+        <div class="step-dot"></div>
+        <div class="step-dot"></div>
+        <div class="step-dot"></div>
+      </div>
+    </div>
+
+    <!-- Cartão do Formulário -->
+    <div class="form-card">
+      <div class="alert-banner" id="globalAlert" role="alert">
+        Por favor, preencha todos os campos obrigatórios destacados antes de prosseguir.
+      </div>
+
+      <form id="assessmentForm" novalidate>
+
+        <!-- ==================== ETAPA 1 ==================== -->
+        <section class="step-panel active" data-step="1">
+          <div class="section-header">
+            <span class="section-tag">Etapa 1 de 6</span>
+            <h2 class="section-title">Dados pessoais e informações básicas</h2>
+          </div>
+
+          <div class="fields-grid two-cols">
+            <div class="field-group col-span-2" data-required="true">
+              <label class="field-label" for="nomeCompleto">
+                <span>Nome completo <span class="req-star">*</span></span>
+              </label>
+              <input type="text" id="nomeCompleto" name="Nome completo" placeholder="Digite seu nome completo" required />
+              <span class="error-msg">Informe seu nome completo.</span>
+            </div>
+
+            <div class="field-group" data-required="true">
+              <label class="field-label" for="dataNascimento">
+                <span>Data de nascimento <span class="req-star">*</span></span>
+              </label>
+              <input type="date" id="dataNascimento" name="Data de nascimento" required />
+              <span class="error-msg">Informe sua data de nascimento.</span>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="idade">
+                <span>Idade</span>
+                <span class="unit-badge">Automático</span>
+              </label>
+              <input type="text" id="idade" name="Idade" readonly placeholder="Calculada automaticamente" />
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="profissao">
+                <span>Profissão</span>
+              </label>
+              <input type="text" id="profissao" name="Profissão" placeholder="Sua ocupação atual" />
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="sexoBiologico">
+                <span>Sexo biológico</span>
+              </label>
+              <select id="sexoBiologico" name="Sexo biológico">
+                <option value="">Selecione...</option>
+                <option value="Feminino">Feminino</option>
+                <option value="Masculino">Masculino</option>
+                <option value="Prefiro não informar">Prefiro não informar</option>
+              </select>
+            </div>
+
+            <div class="field-group" data-required="true">
+              <label class="field-label" for="alturaStep1">
+                <span>Altura <span class="req-star">*</span></span>
+                <span class="unit-badge">cm</span>
+              </label>
+              <input type="number" id="alturaStep1" name="Altura (cm)" min="50" max="250" step="1" placeholder="Ex: 175" required />
+              <span class="error-msg">Informe sua altura em centímetros.</span>
+            </div>
+
+            <div class="field-group" data-required="true">
+              <label class="field-label" for="pesoStep1">
+                <span>Peso atual <span class="req-star">*</span></span>
+                <span class="unit-badge">kg</span>
+              </label>
+              <input type="number" id="pesoStep1" name="Peso atual (kg)" min="20" max="350" step="0.1" placeholder="Ex: 78.5" required />
+              <span class="error-msg">Informe seu peso atual em kg.</span>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="whatsapp">
+                <span>WhatsApp</span>
+              </label>
+              <input type="tel" id="whatsapp" name="WhatsApp" placeholder="(00) 00000-0000" />
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="email">
+                <span>E-mail</span>
+              </label>
+              <input type="email" id="email" name="E-mail" placeholder="seuemail@exemplo.com" />
+              <span class="error-msg">Informe um e-mail válido.</span>
+            </div>
+
+            <div class="field-group col-span-2">
+              <label class="field-label" for="comoConheceu">
+                <span>Como conheceu a consultoria?</span>
+              </label>
+              <input type="text" id="comoConheceu" name="Como conheceu a consultoria?" placeholder="Instagram, indicação, Google, etc." />
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== ETAPA 2 ==================== -->
+        <section class="step-panel" data-step="2">
+          <div class="section-header">
+            <span class="section-tag">Etapa 2 de 6</span>
+            <h2 class="section-title">Anamnese</h2>
+          </div>
+
+          <div class="fields-grid two-cols">
+            <div class="field-group col-span-2">
+              <label class="field-label" for="objetivoPrincipal">
+                <span>Objetivo principal</span>
+              </label>
+              <textarea id="objetivoPrincipal" name="Objetivo principal" placeholder="Descreva seu objetivo principal com os treinos"></textarea>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="freqSemanalTreino">
+                <span>Frequência semanal de treinamento</span>
+              </label>
+              <select id="freqSemanalTreino" name="Frequência semanal de treinamento">
+                <option value="">Selecione...</option>
+                <option value="Sedentário (não treina atualmente)">Sedentário (não treina atualmente)</option>
+                <option value="1 a 2 vezes por semana">1 a 2 vezes por semana</option>
+                <option value="3 vezes por semana">3 vezes por semana</option>
+                <option value="4 vezes por semana">4 vezes por semana</option>
+                <option value="5 vezes por semana">5 vezes por semana</option>
+                <option value="6 ou mais vezes por semana">6 ou mais vezes por semana</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="tempoDisponivelTreino">
+                <span>Tempo disponível por dia/treino</span>
+              </label>
+              <input type="text" id="tempoDisponivelTreino" name="Tempo disponível por dia/treino" placeholder="Ex: 45 min, 1 hora..." />
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="praticaEsporte">
+                <span>Pratica esporte?</span>
+              </label>
+              <select id="praticaEsporte" name="Pratica esporte?">
+                <option value="">Selecione...</option>
+                <option value="Sim">Sim</option>
+                <option value="Não">Não</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="qualEsporte">
+                <span>Qual esporte?</span>
+              </label>
+              <input type="text" id="qualEsporte" name="Qual esporte?" placeholder="Ex: Corrida, futebol, natação..." />
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="freqEsporte">
+                <span>Frequência da prática esportiva</span>
+              </label>
+              <input type="text" id="freqEsporte" name="Frequência da prática esportiva" placeholder="Ex: 2x na semana" />
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="tempoPraticaEsporte">
+                <span>Quanto tempo pratica ou praticou?</span>
+              </label>
+              <input type="text" id="tempoPraticaEsporte" name="Quanto tempo pratica ou praticou?" placeholder="Ex: 2 anos" />
+            </div>
+
+            <div class="field-group col-span-2">
+              <label class="field-label" for="patologias">
+                <span>Patologias</span>
+              </label>
+              <textarea id="patologias" name="Patologias" placeholder="Hipertensão, diabetes, problemas cardíacos, respiratórios, etc."></textarea>
+            </div>
+
+            <div class="field-group col-span-2">
+              <label class="field-label" for="lesoesCirurgias">
+                <span>Lesões e/ou cirurgias</span>
+              </label>
+              <textarea id="lesoesCirurgias" name="Lesões e/ou cirurgias" placeholder="Descreva lesões articulares, musculares ou cirurgias anteriores"></textarea>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="patologiasMaternas">
+                <span>Histórico de patologias maternas</span>
+              </label>
+              <textarea id="patologiasMaternas" name="Histórico de patologias maternas" placeholder="Histórico de saúde familiar (mãe)"></textarea>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="patologiasPaternas">
+                <span>Histórico de patologias paternas</span>
+              </label>
+              <textarea id="patologiasPaternas" name="Histórico de patologias paternas" placeholder="Histórico de saúde familiar (pai)"></textarea>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="medicacaoControlada">
+                <span>Faz uso de medicação controlada?</span>
+              </label>
+              <select id="medicacaoControlada" name="Faz uso de medicação controlada?">
+                <option value="">Selecione...</option>
+                <option value="Sim">Sim</option>
+                <option value="Não">Não</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="qualMedicacao">
+                <span>Qual medicação?</span>
+              </label>
+              <input type="text" id="qualMedicacao" name="Qual medicação?" placeholder="Nome e dosagem, se aplicável" />
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="etilismo">
+                <span>Etilismo</span>
+              </label>
+              <select id="etilismo" name="Etilismo">
+                <option value="">Selecione...</option>
+                <option value="Sim">Sim</option>
+                <option value="Não">Não</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="freqAlcool">
+                <span>Frequência do consumo de álcool</span>
+              </label>
+              <input type="text" id="freqAlcool" name="Frequência do consumo de álcool" placeholder="Ex: Socialmente aos finais de semana" />
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="tabagismo">
+                <span>Tabagismo</span>
+              </label>
+              <select id="tabagismo" name="Tabagismo">
+                <option value="">Selecione...</option>
+                <option value="Sim">Sim</option>
+                <option value="Não">Não</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="horasSono">
+                <span>Horas de sono por dia</span>
+              </label>
+              <input type="number" id="horasSono" name="Horas de sono por dia" min="0" max="24" step="0.5" placeholder="Ex: 7" />
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="dietaAcompanhamento">
+                <span>Dieta ou acompanhamento nutricional</span>
+              </label>
+              <select id="dietaAcompanhamento" name="Dieta ou acompanhamento nutricional">
+                <option value="">Selecione...</option>
+                <option value="Sim">Sim</option>
+                <option value="Não">Não</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="temNutricionista">
+                <span>Tem orientador ou nutricionista?</span>
+              </label>
+              <select id="temNutricionista" name="Tem orientador ou nutricionista?">
+                <option value="">Selecione...</option>
+                <option value="Sim">Sim</option>
+                <option value="Não">Não</option>
+              </select>
+            </div>
+
+            <div class="field-group col-span-2">
+              <label class="field-label" for="patologiasSono">
+                <span>Possui patologias relacionadas ao sono?</span>
+              </label>
+              <textarea id="patologiasSono" name="Possui patologias relacionadas ao sono?" placeholder="Insônia, apneia do sono, etc."></textarea>
+            </div>
+
+            <div class="field-group col-span-2">
+              <label class="field-label" for="doresAtuais">
+                <span>Sente dores atualmente? Onde e desde quando?</span>
+              </label>
+              <textarea id="doresAtuais" name="Sente dores atualmente? Onde e desde quando?" placeholder="Local da dor, intensidade e há quanto tempo ocorre"></textarea>
+            </div>
+
+            <div class="field-group col-span-2">
+              <label class="field-label" for="restricaoMedica">
+                <span>Possui alguma restrição médica para exercícios?</span>
+              </label>
+              <textarea id="restricaoMedica" name="Possui alguma restrição médica para exercícios?"></textarea>
+            </div>
+
+            <div class="field-group col-span-2">
+              <label class="field-label" for="orientacaoEvitarEsforco">
+                <span>Já recebeu orientação médica para evitar algum exercício ou esforço?</span>
+              </label>
+              <textarea id="orientacaoEvitarEsforco" name="Já recebeu orientação médica para evitar algum exercício ou esforço?"></textarea>
+            </div>
+
+            <div class="field-group col-span-2">
+              <label class="field-label" for="sintomasEsforco">
+                <span>Sente dor no peito, tontura, desmaio, falta de ar incomum ou palpitações durante esforços?</span>
+              </label>
+              <textarea id="sintomasEsforco" name="Sente dor no peito, tontura, desmaio, falta de ar incomum ou palpitações durante esforços?"></textarea>
+            </div>
+
+            <div class="field-group col-span-2">
+              <label class="field-label" for="movimentoDor">
+                <span>Existe algum movimento ou exercício que provoca dor ou dificuldade?</span>
+              </label>
+              <textarea id="movimentoDor" name="Existe algum movimento ou exercício que provoca dor ou dificuldade?"></textarea>
+            </div>
+
+            <div class="field-group col-span-2">
+              <label class="field-label" for="observacoesSaude">
+                <span>Observações sobre saúde</span>
+              </label>
+              <textarea id="observacoesSaude" name="Observações sobre saúde" placeholder="Outras informações relevantes sobre sua saúde"></textarea>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== ETAPA 3 ==================== -->
+        <section class="step-panel" data-step="3">
+          <div class="section-header">
+            <span class="section-tag">Etapa 3 de 6</span>
+            <h2 class="section-title">Medidas antropométricas</h2>
+          </div>
+
+          <div class="fields-grid two-cols">
+            <div class="field-group col-span-2">
+              <label class="field-label" for="dataAvaliacao">
+                <span>Data da avaliação</span>
+                <span class="unit-badge">Automático</span>
+              </label>
+              <input type="text" id="dataAvaliacao" name="Data da avaliação" readonly />
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="pesoStep3">
+                <span>Peso</span>
+                <span class="unit-badge">kg</span>
+              </label>
+              <input type="number" id="pesoStep3" name="Peso (kg)" min="20" max="350" step="0.1" placeholder="Ex: 78.5" />
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="alturaStep3">
+                <span>Altura</span>
+                <span class="unit-badge">cm</span>
+              </label>
+              <input type="number" id="alturaStep3" name="Altura (cm)" min="50" max="250" step="1" placeholder="Ex: 175" />
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="circCintura">
+                <span>Circunferência da cintura</span>
+                <span class="unit-badge">cm</span>
+              </label>
+              <input type="number" id="circCintura" name="Circunferência da cintura (cm)" min="30" max="250" step="0.1" placeholder="Menor circunferência do tronco" />
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="circAbdominal">
+                <span>Circunferência abdominal</span>
+                <span class="unit-badge">cm</span>
+              </label>
+              <input type="number" id="circAbdominal" name="Circunferência abdominal (cm)" min="30" max="250" step="0.1" placeholder="Na linha do umbigo" />
+            </div>
+
+            <div class="field-group col-span-2">
+              <label class="field-label" for="circQuadril">
+                <span>Circunferência do quadril</span>
+                <span class="unit-badge">cm</span>
+              </label>
+              <input type="number" id="circQuadril" name="Circunferência do quadril (cm)" min="40" max="250" step="0.1" placeholder="Maior circunferência dos glúteos" />
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== ETAPA 4 ==================== -->
+        <section class="step-panel" data-step="4">
+          <div class="section-header">
+            <span class="section-tag">Etapa 4 de 6</span>
+            <h2 class="section-title">Objetivos e expectativas</h2>
+          </div>
+
+          <div class="fields-grid">
+            <div class="field-group">
+              <label class="field-label">
+                <span>Objetivos (selecione um ou mais)</span>
+              </label>
+              <div class="checkbox-grid" id="objetivosMultiSelect">
+                <label class="check-card">
+                  <input type="checkbox" name="Objetivos" value="Emagrecimento" />
+                  <span class="check-card-text">Emagrecimento</span>
+                </label>
+                <label class="check-card">
+                  <input type="checkbox" name="Objetivos" value="Hipertrofia / ganho de massa muscular" />
+                  <span class="check-card-text">Hipertrofia / ganho de massa muscular</span>
+                </label>
+                <label class="check-card">
+                  <input type="checkbox" name="Objetivos" value="Condicionamento físico" />
+                  <span class="check-card-text">Condicionamento físico</span>
+                </label>
+                <label class="check-card">
+                  <input type="checkbox" name="Objetivos" value="Ganho de força" />
+                  <span class="check-card-text">Ganho de força</span>
+                </label>
+                <label class="check-card">
+                  <input type="checkbox" name="Objetivos" value="Saúde e qualidade de vida" />
+                  <span class="check-card-text">Saúde e qualidade de vida</span>
+                </label>
+                <label class="check-card">
+                  <input type="checkbox" name="Objetivos" value="Mobilidade e flexibilidade" />
+                  <span class="check-card-text">Mobilidade e flexibilidade</span>
+                </label>
+                <label class="check-card">
+                  <input type="checkbox" name="Objetivos" value="Retorno à atividade física" />
+                  <span class="check-card-text">Retorno à atividade física</span>
+                </label>
+                <label class="check-card">
+                  <input type="checkbox" name="Objetivos" value="Outro" />
+                  <span class="check-card-text">Outro</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="outroObjetivo">
+                <span>Outro objetivo</span>
+              </label>
+              <input type="text" id="outroObjetivo" name="Outro objetivo" placeholder="Especifique caso tenha selecionado 'Outro'" />
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="esperaConsultoria">
+                <span>O que espera alcançar com a consultoria?</span>
+              </label>
+              <textarea id="esperaConsultoria" name="O que espera alcançar com a consultoria?"></textarea>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="maiorDificuldade">
+                <span>Qual sua maior dificuldade para manter uma rotina de exercícios?</span>
+              </label>
+              <textarea id="maiorDificuldade" name="Qual sua maior dificuldade para manter uma rotina de exercícios?"></textarea>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="prazoMeta">
+                <span>Existe algum prazo ou meta que gostaria de alcançar?</span>
+              </label>
+              <textarea id="prazoMeta" name="Existe algum prazo ou meta que gostaria de alcançar?"></textarea>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="comentariosObjetivos">
+                <span>Comentários</span>
+              </label>
+              <textarea id="comentariosObjetivos" name="Comentários"></textarea>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== ETAPA 5 ==================== -->
+        <section class="step-panel" data-step="5">
+          <div class="section-header">
+            <span class="section-tag">Etapa 5 de 6</span>
+            <h2 class="section-title">Estrutura e preferências de treino</h2>
+          </div>
+
+          <div class="fields-grid two-cols">
+            <div class="field-group">
+              <label class="field-label" for="ondeTreinar">
+                <span>Onde pretende treinar?</span>
+              </label>
+              <select id="ondeTreinar" name="Onde pretende treinar?">
+                <option value="">Selecione...</option>
+                <option value="Academia">Academia</option>
+                <option value="Casa">Casa</option>
+                <option value="Ambos">Ambos</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="quantosDiasTreinar">
+                <span>Quantos dias por semana pode treinar?</span>
+              </label>
+              <select id="quantosDiasTreinar" name="Quantos dias por semana pode treinar?">
+                <option value="">Selecione...</option>
+                <option value="2 dias por semana">2 dias por semana</option>
+                <option value="3 dias por semana">3 dias por semana</option>
+                <option value="4 dias por semana">4 dias por semana</option>
+                <option value="5 dias por semana">5 dias por semana</option>
+                <option value="6 dias por semana">6 dias por semana</option>
+                <option value="7 dias por semana">7 dias por semana</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="horarioPreferido">
+                <span>Qual horário prefere?</span>
+              </label>
+              <input type="text" id="horarioPreferido" name="Qual horário prefere?" placeholder="Ex: Manhã (07:00), Noite (19:00)..." />
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="tempoSessao">
+                <span>Quanto tempo tem disponível por sessão?</span>
+              </label>
+              <input type="text" id="tempoSessao" name="Quanto tempo tem disponível por sessão?" placeholder="Ex: 50 minutos" />
+            </div>
+
+            <div class="field-group col-span-2">
+              <label class="field-label" for="equipamentosDisponiveis">
+                <span>Quais equipamentos tem disponíveis?</span>
+              </label>
+              <textarea id="equipamentosDisponiveis" name="Quais equipamentos tem disponíveis?" placeholder="Descreva a estrutura da academia ou local de treino"></textarea>
+            </div>
+
+            <div class="field-group col-span-2">
+              <label class="field-label" for="equipamentosCasa">
+                <span>Equipamentos disponíveis em casa</span>
+              </label>
+              <textarea id="equipamentosCasa" name="Equipamentos disponíveis em casa" placeholder="Halteres, elásticos, colchonete, barra fixa, etc."></textarea>
+            </div>
+
+            <div class="field-group col-span-2">
+              <label class="field-label" for="exercicioNaoGosta">
+                <span>Existe algum exercício de que não gosta?</span>
+              </label>
+              <textarea id="exercicioNaoGosta" name="Existe algum exercício de que não gosta?"></textarea>
+            </div>
+
+            <div class="field-group col-span-2">
+              <label class="field-label" for="exercicioNaoConsegue">
+                <span>Existe algum exercício que não consegue realizar?</span>
+              </label>
+              <textarea id="exercicioNaoConsegue" name="Existe algum exercício que não consegue realizar?"></textarea>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== ETAPA 6 ==================== -->
+        <section class="step-panel" data-step="6">
+          <div class="section-header">
+            <span class="section-tag">Etapa 6 de 6</span>
+            <h2 class="section-title">Revisão, autorizações e privacidade</h2>
+          </div>
+
+          <!-- Resumo para revisão antes da conclusão -->
+          <div class="review-wrapper">
+            <div class="review-header-bar">
+              <h3>Resumo das suas respostas</h3>
+              <span style="font-size: 0.75rem; color: var(--text-muted);">Confira antes de gerar o PDF</span>
+            </div>
+            <div id="reviewContainer"></div>
+          </div>
+
+          <!-- Aviso de Privacidade -->
+          <div class="privacy-box">
+            <h4>Aviso de Privacidade e Proteção de Dados</h4>
+            <p>
+              <strong>Finalidade e Uso:</strong> Os dados pessoais e de saúde coletados neste formulário destinam-se exclusivamente à avaliação física inicial, análise de segurança clínica e prescrição individualizada de treinamento físico pela Consultoria Lucas Melo.
+            </p>
+            <p>
+              <strong>Armazenamento e Segurança:</strong> Este formulário funciona localmente no seu dispositivo e <strong>não transmite, envia ou armazena</strong> suas informações em servidores externos ou bancos de dados na nuvem. Ao finalizar, será gerado um arquivo PDF diretamente no seu navegador para que você o salve e encaminhe ao profissional.
+            </p>
+            <p>
+              <strong>Acesso e Confidencialidade:</strong> O acesso ao documento gerado é restrito a você e ao profissional Lucas Melo, sendo tratado sob sigilo profissional e em conformidade com a Lei Geral de Proteção de Dados (LGPD - Lei nº 13.709/2018).
+            </p>
+          </div>
+
+          <!-- Declarações Obrigatórias -->
+          <div class="consent-list">
+            <div class="field-group consent-item" data-required="true">
+              <label class="check-card">
+                <input type="checkbox" id="checkVeracidade" name="Declaração de veracidade" required />
+                <span class="check-card-text">
+                  Declaro que as informações fornecidas são verdadeiras. <span class="req-star">*</span>
+                </span>
+              </label>
+              <span class="error-msg">Você precisa confirmar esta declaração.</span>
+            </div>
+
+            <div class="field-group consent-item" data-required="true">
+              <label class="check-card">
+                <input type="checkbox" id="checkCiencia" name="Ciência sobre a prescrição" required />
+                <span class="check-card-text">
+                  Estou ciente de que a prescrição será elaborada com base nas informações fornecidas e que devo comunicar alterações relevantes de saúde. <span class="req-star">*</span>
+                </span>
+              </label>
+              <span class="error-msg">Você precisa confirmar esta declaração.</span>
+            </div>
+
+            <div class="field-group consent-item" data-required="true">
+              <label class="check-card">
+                <input type="checkbox" id="checkPrivacidade" name="Aviso de privacidade" required />
+                <span class="check-card-text">
+                  Li o aviso de privacidade e estou ciente do uso informado dos meus dados para a finalidade descrita. <span class="req-star">*</span>
+                </span>
+              </label>
+              <span class="error-msg">Você precisa confirmar esta declaração.</span>
+            </div>
+
+            <div class="field-group consent-item" data-required="true">
+              <label class="check-card">
+                <input type="checkbox" id="checkConcordancia" name="Confirmação de leitura e concordância" required />
+                <span class="check-card-text">
+                  Confirmo a leitura integral deste formulário e concordo com os termos acima. <span class="req-star">*</span>
+                </span>
+              </label>
+              <span class="error-msg">Você precisa confirmar a leitura e concordância.</span>
+            </div>
+          </div>
+
+          <div class="field-group" style="margin-top: 18px;">
+            <label class="field-label" for="dataPreenchimento">
+              <span>Data de preenchimento</span>
+              <span class="unit-badge">Automático</span>
+            </label>
+            <input type="text" id="dataPreenchimento" name="Data de preenchimento" readonly />
+          </div>
+        </section>
+
+        <!-- Navegação do Formulário -->
+        <div class="form-nav">
+          <button type="button" class="btn btn-secondary hidden" id="btnPrev">Voltar</button>
+          <button type="button" class="btn btn-primary" id="btnNext">Avançar</button>
+          <button type="submit" class="btn btn-primary hidden" id="btnSubmit">Concluir e gerar PDF</button>
+        </div>
+
+      </form>
+    </div>
+  </main>
+
+  <footer class="app-footer">
+    Lucas Melo - Personal Trainer &bull; Formulário confidencial sem envio externo de dados.
+  </footer>
+
+  <!-- ==================== RELATÓRIO EXCLUSIVO PARA IMPRESSÃO / PDF ==================== -->
+  <div id="pdf-report" aria-hidden="true">
+    <div class="pdf-header">
+      <div class="pdf-brand-left">
+        <svg viewBox="0 0 120 70" width="54" height="32" xmlns="http://www.w3.org/2000/svg">
+          <path d="M22 12 L10 56 L42 56 L45 45 L25 45 L34 12 Z" fill="#FF9F1C" />
+          <path d="M52 12 L40 56 L51 56 L58 29 L66 48 L75 48 L89 29 L82 56 L94 56 L106 12 L94 12 L73 38 L64 12 Z" fill="#FF9F1C" />
+        </svg>
+        <div class="pdf-title-group">
+          <h1>Lucas Melo - Personal Trainer</h1>
+          <span>Consultoria Esportiva &amp; Treinamento</span>
+        </div>
+      </div>
+      <div class="pdf-doc-meta">
+        <strong>Avaliação Física Online</strong>
+        <span id="pdfHeaderDate"></span>
+      </div>
+    </div>
+
+    <div id="pdfDynamicSections"></div>
+
+    <!-- Área exclusiva do profissional -->
+    <div class="pdf-pro-area">
+      <div class="pdf-pro-header">Área exclusiva do profissional</div>
+      <div class="pdf-pro-block">
+        <div class="pdf-pro-label">Anotações do profissional</div>
+        <div class="pdf-ruled-lines"></div>
+      </div>
+      <div class="pdf-pro-block">
+        <div class="pdf-pro-label">Observações complementares</div>
+        <div class="pdf-ruled-lines"></div>
+      </div>
+    </div>
+
+    <div class="pdf-footer">
+      Documento confidencial. Contém informações pessoais e dados de saúde.
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      "use strict";
+
+      const totalSteps = 6;
+      let currentStep = 1;
+
+      const form = document.getElementById("assessmentForm");
+      const panels = Array.from(document.querySelectorAll(".step-panel"));
+      const btnPrev = document.getElementById("btnPrev");
+      const btnNext = document.getElementById("btnNext");
+      const btnSubmit = document.getElementById("btnSubmit");
+      const stepCounterText = document.getElementById("stepCounterText");
+      const stepPercentText = document.getElementById("stepPercentText");
+      const progressFill = document.getElementById("progressFill");
+      const stepDots = Array.from(document.querySelectorAll(".step-dot"));
+      const globalAlert = document.getElementById("globalAlert");
+
+      // Formata data atual (DD/MM/AAAA)
+      function getFormattedToday() {
+        const now = new Date();
+        const dd = String(now.getDate()).padStart(2, "0");
+        const mm = String(now.getMonth() + 1).padStart(2, "0");
+        const yyyy = now.getFullYear();
+        return `${dd}/${mm}/${yyyy}`;
+      }
+
+      // Inicializa datas automáticas
+      function initAutomaticDates() {
+        const today = getFormattedToday();
+        const dataAvaliacao = document.getElementById("dataAvaliacao");
+        const dataPreenchimento = document.getElementById("dataPreenchimento");
+        if (dataAvaliacao) dataAvaliacao.value = today;
+        if (dataPreenchimento) dataPreenchimento.value = today;
+      }
+
+      // Cálculo exato da idade considerando mês e dia
+      const dobInput = document.getElementById("dataNascimento");
+      const ageInput = document.getElementById("idade");
+
+      function calculateAge(dobString) {
+        if (!dobString) return "";
+        const parts = dobString.split("-");
+        if (parts.length !== 3) return "";
+        const birthYear = parseInt(parts[0], 10);
+        const birthMonth = parseInt(parts[1], 10) - 1;
+        const birthDay = parseInt(parts[2], 10);
+
+        const today = new Date();
+        let age = today.getFullYear() - birthYear;
+        const monthDiff = today.getMonth() - birthMonth;
+
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDay)) {
+          age--;
+        }
+
+        if (age < 0 || age > 130 || isNaN(age)) return "";
+        return `${age} anos`;
+      }
+
+      dobInput.addEventListener("change", function () {
+        ageInput.value = calculateAge(this.value);
+      });
+
+      // Sincroniza Peso e Altura entre Etapa 1 e Etapa 3 para agilizar preenchimento
+      const pesoStep1 = document.getElementById("pesoStep1");
+      const pesoStep3 = document.getElementById("pesoStep3");
+      const alturaStep1 = document.getElementById("alturaStep1");
+      const alturaStep3 = document.getElementById("alturaStep3");
+
+      pesoStep1.addEventListener("input", () => {
+        if (!pesoStep3.dataset.manuallyEdited) {
+          pesoStep3.value = pesoStep1.value;
+        }
+      });
+      pesoStep3.addEventListener("input", () => {
+        pesoStep3.dataset.manuallyEdited = "true";
+      });
+
+      alturaStep1.addEventListener("input", () => {
+        if (!alturaStep3.dataset.manuallyEdited) {
+          alturaStep3.value = alturaStep1.value;
+        }
+      });
+      alturaStep3.addEventListener("input", () => {
+        alturaStep3.dataset.manuallyEdited = "true";
+      });
+
+      // Estilização visual dos cards de checkbox
+      document.querySelectorAll('.check-card input[type="checkbox"]').forEach((cb) => {
+        cb.addEventListener("change", function () {
+          const card = this.closest(".check-card");
+          if (card) {
+            card.classList.toggle("checked", this.checked);
+          }
+          const group = this.closest(".field-group");
+          if (group && this.checked) {
+            group.classList.remove("has-error");
+          }
+        });
+      });
+
+      // Limpa erro ao digitar/alterar campo
+      form.querySelectorAll("input, select, textarea").forEach((el) => {
+        el.addEventListener("input", () => {
+          const group = el.closest(".field-group");
+          if (group) group.classList.remove("has-error");
+          globalAlert.classList.remove("visible");
+        });
+      });
+
+      // Validação da etapa atual
+      function validateStep(stepNumber) {
+        const panel = panels.find((p) => Number(p.dataset.step) === stepNumber);
+        if (!panel) return true;
+
+        let isValid = true;
+        const requiredGroups = panel.querySelectorAll('.field-group[data-required="true"]');
+
+        requiredGroups.forEach((group) => {
+          const input = group.querySelector("input, select, textarea");
+          if (!input) return;
+
+          let fieldValid = true;
+          if (input.type === "checkbox") {
+            fieldValid = input.checked;
+          } else {
+            fieldValid = input.value.trim() !== "";
+          }
+
+          if (!fieldValid) {
+            group.classList.add("has-error");
+            isValid = false;
+          } else {
+            group.classList.remove("has-error");
+          }
+        });
+
+        // Valida formato de e-mail se preenchido
+        const emailField = panel.querySelector('input[type="email"]');
+        if (emailField && emailField.value.trim() !== "") {
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailRegex.test(emailField.value.trim())) {
+            emailField.closest(".field-group").classList.add("has-error");
+            isValid = false;
+          }
+        }
+
+        if (!isValid) {
+          globalAlert.classList.add("visible");
+          const firstError = panel.querySelector(".has-error input, .has-error select, .has-error textarea");
+          if (firstError) firstError.focus();
+        } else {
+          globalAlert.classList.remove("visible");
+        }
+
+        return isValid;
+      }
+
+      // Formata data ISO (AAAA-MM-DD) para DD/MM/AAAA
+      function formatDateBR(isoDate) {
+        if (!isoDate || !isoDate.includes("-")) return isoDate;
+        const [y, m, d] = isoDate.split("-");
+        return `${d}/${m}/${y}`;
+      }
+
+      // Coleta dados estruturados por seção (ignorando campos não preenchidos)
+      function collectFormDataBySection() {
+        const sectionsData = [];
+
+        panels.forEach((panel) => {
+          const stepNum = Number(panel.dataset.step);
+          const titleEl = panel.querySelector(".section-title");
+          const sectionTitle = titleEl ? titleEl.textContent.trim() : `Etapa ${stepNum}`;
+          const items = [];
+
+          if (stepNum === 4) {
+            // Tratamento especial para multi-select de Objetivos
+            const checkedGoals = Array.from(panel.querySelectorAll('input[name="Objetivos"]:checked')).map(
+              (cb) => cb.value
+            );
+            if (checkedGoals.length > 0) {
+              items.push({
+                question: "Objetivos",
+                answer: checkedGoals.join(", "),
+                fullWidth: true
+              });
+            }
+          }
+
+          const fieldGroups = panel.querySelectorAll(".field-group");
+          fieldGroups.forEach((group) => {
+            // Ignora container do multi-select já tratado acima
+            if (group.querySelector("#objetivosMultiSelect")) return;
+
+            const input = group.querySelector("input, select, textarea");
+            if (!input) return;
+
+            const labelName = input.name || "Campo";
+
+            if (input.type === "checkbox") {
+              if (input.checked) {
+                const textSpan = group.querySelector(".check-card-text");
+                const cleanText = textSpan
+                  ? textSpan.textContent.replace("*", "").trim()
+                  : "Confirmado";
+                items.push({
+                  question: labelName,
+                  answer: `Sim — ${cleanText}`,
+                  fullWidth: true
+                });
+              }
+              return;
+            }
+
+            let val = input.value.trim();
+            if (!val) return; // Não exibir campos não preenchidos
+
+            if (input.type === "date") {
+              val = formatDateBR(val);
+            } else if (labelName.includes("(cm)")) {
+              val = `${val} cm`;
+            } else if (labelName.includes("(kg)")) {
+              val = `${val} kg`;
+            } else if (labelName === "Horas de sono por dia") {
+              val = `${val} horas`;
+            }
+
+            const isLong = input.tagName === "TEXTAREA" || val.length > 45;
+
+            items.push({
+              question: labelName,
+              answer: val,
+              fullWidth: isLong
+            });
+          });
+
+          sectionsData.push({
+            step: stepNum,
+            title: sectionTitle,
+            items
+          });
+        });
+
+        return sectionsData;
+      }
+
+      // Renderiza o painel de revisão na Etapa 6
+      function renderReviewSummary() {
+        const reviewContainer = document.getElementById("reviewContainer");
+        const sections = collectFormDataBySection();
+        reviewContainer.innerHTML = "";
+
+        sections.forEach((sec) => {
+          if (sec.step === 6) return; // A própria etapa 6 são os termos atuais
+
+          const block = document.createElement("div");
+          block.className = "review-section-block";
+
+          const header = document.createElement("div");
+          header.className = "review-sec-title";
+          header.innerHTML = `
+            <span>${sec.step}. ${sec.title}</span>
+            <button type="button" class="btn-edit-step" data-goto="${sec.step}">Editar</button>
+          `;
+          block.appendChild(header);
+
+          if (sec.items.length === 0) {
+            const emptyNote = document.createElement("div");
+            emptyNote.className = "review-row";
+            emptyNote.innerHTML = `<span class="review-q">Nenhum campo preenchido nesta etapa.</span>`;
+            block.appendChild(emptyNote);
+          } else {
+            sec.items.forEach((item) => {
+              const row = document.createElement("div");
+              row.className = "review-row";
+              const qEl = document.createElement("span");
+              qEl.className = "review-q";
+              qEl.textContent = item.question;
+
+              const aEl = document.createElement("span");
+              aEl.className = "review-a";
+              aEl.textContent = item.answer;
+
+              row.appendChild(qEl);
+              row.appendChild(aEl);
+              block.appendChild(row);
+            });
+          }
+
+          reviewContainer.appendChild(block);
+        });
+
+        // Atalho para editar etapa diretamente da revisão
+        reviewContainer.querySelectorAll(".btn-edit-step").forEach((btn) => {
+          btn.addEventListener("click", function () {
+            const targetStep = Number(this.dataset.goto);
+            goToStep(targetStep);
+          });
+        });
+      }
+
+      // Atualiza visualização das etapas
+      function goToStep(stepNumber) {
+        currentStep = stepNumber;
+        globalAlert.classList.remove("visible");
+
+        panels.forEach((panel) => {
+          panel.classList.toggle("active", Number(panel.dataset.step) === currentStep);
+        });
+
+        const percent = Math.round((currentStep / totalSteps) * 100);
+        stepCounterText.textContent = `Etapa ${currentStep} de ${totalSteps}`;
+        stepPercentText.textContent = `${percent}% concluído`;
+        progressFill.style.width = `${percent}%`;
+
+        stepDots.forEach((dot, idx) => {
+          dot.classList.remove("active", "completed");
+          if (idx + 1 === currentStep) {
+            dot.classList.add("active");
+          } else if (idx + 1 < currentStep) {
+            dot.classList.add("completed");
+          }
+        });
+
+        btnPrev.classList.toggle("hidden", currentStep === 1);
+        btnNext.classList.toggle("hidden", currentStep === totalSteps);
+        btnSubmit.classList.toggle("hidden", currentStep !== totalSteps);
+
+        if (currentStep === totalSteps) {
+          renderReviewSummary();
+        }
+
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      btnNext.addEventListener("click", () => {
+        if (validateStep(currentStep)) {
+          if (currentStep < totalSteps) {
+            goToStep(currentStep + 1);
+          }
+        }
+      });
+
+      btnPrev.addEventListener("click", () => {
+        if (currentStep > 1) {
+          goToStep(currentStep - 1);
+        }
+      });
+
+      // Sanitiza o nome do aluno para o nome do arquivo PDF
+      function sanitizeFilename(name) {
+        if (!name) return "Aluno";
+        return name
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .trim()
+          .replace(/\s+/g, "_")
+          .replace(/[^a-zA-Z0-9_-]/g, "");
+      }
+
+      // Prepara o DOM de impressão e dispara o PDF
+      function buildPrintDocumentAndPrint() {
+        const sections = collectFormDataBySection();
+        const pdfContainer = document.getElementById("pdfDynamicSections");
+        const pdfHeaderDate = document.getElementById("pdfHeaderDate");
+        pdfContainer.innerHTML = "";
+
+        pdfHeaderDate.textContent = `Data: ${getFormattedToday()}`;
+
+        sections.forEach((sec) => {
+          if (sec.items.length === 0) return;
+
+          const sectionEl = document.createElement("div");
+          sectionEl.className = "pdf-section";
+
+          const titleEl = document.createElement("div");
+          titleEl.className = "pdf-section-title";
+          titleEl.textContent = `${sec.step}. ${sec.title}`;
+          sectionEl.appendChild(titleEl);
+
+          const gridEl = document.createElement("div");
+          gridEl.className = "pdf-items-grid";
+
+          sec.items.forEach((item) => {
+            const itemEl = document.createElement("div");
+            itemEl.className = "pdf-item" + (item.fullWidth ? " full-width" : "");
+
+            const qEl = document.createElement("div");
+            qEl.className = "pdf-question";
+            qEl.textContent = item.question;
+
+            const aEl = document.createElement("div");
+            aEl.className = "pdf-answer";
+            aEl.textContent = item.answer;
+
+            itemEl.appendChild(qEl);
+            itemEl.appendChild(aEl);
+            gridEl.appendChild(itemEl);
+          });
+
+          sectionEl.appendChild(gridEl);
+          pdfContainer.appendChild(sectionEl);
+        });
+
+        // Define título do documento para sugerir Avaliacao_NomeDoAluno ao salvar PDF
+        const originalTitle = document.title;
+        const studentName = document.getElementById("nomeCompleto").value;
+        const cleanStudentName = sanitizeFilename(studentName);
+        document.title = `Avaliacao_${cleanStudentName}`;
+
+        window.print();
+
+        // Restaura título original após diálogo de impressão
+        setTimeout(() => {
+          document.title = originalTitle;
+        }, 1000);
+      }
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        if (!validateStep(currentStep)) return;
+        buildPrintDocumentAndPrint();
+      });
+
+      // Inicialização
+      initAutomaticDates();
+    })();
+  </script>
+</body>
+</html>
